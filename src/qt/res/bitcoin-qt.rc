@@ -1,4 +1,4 @@
-IDI_ICON1 ICON DISCARDABLE "icons/babesandnerd.ico"
+IDI_ICON1 ICON DISCARDABLE "icons/funcoin.ico"
 
 #include <windows.h>             // needed for VERSIONINFO
 #include "../../clientversion.h" // holds the needed client version information
@@ -18,14 +18,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "babesandnerd"
-            VALUE "FileDescription",    "babesandnerd-qt (OSS GUI client for optimum)"
+            VALUE "CompanyName",        "funcoin"
+            VALUE "FileDescription",    "funcoin-qt (OSS GUI client for optimum)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "babesandnerd-qt"
+            VALUE "InternalName",       "funcoin-qt"
             VALUE "LegalCopyright",     "2009-2014 The Bitcoin developers, 2012-2014 The Novacoin & PPCoin developers, 2014 The Babesandnerd developers"
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "babesandnerd-qt.exe"
-            VALUE "ProductName",        "babesandnerd-qt"
+            VALUE "OriginalFilename",   "funcoin-qt.exe"
+            VALUE "ProductName",        "funcoin-qt"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

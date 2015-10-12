@@ -34,16 +34,16 @@ unsigned int nTransactionsUpdated = 0;
 map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
 
-CBigNum bnProofOfWorkLimit(~uint256(0) >> 4);
-CBigNum bnProofOfStakeLimit(~uint256(0) >> 4);
-CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 2);
+CBigNum bnProofOfWorkLimit(~uint256(0) >> 20);
+CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
+CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 
 unsigned int nTargetSpacing = 1 * 90; // 90 secs
-unsigned int nStakeMinAge = 60 * 60 * 2; // 2 hours
-unsigned int nStakeMaxAge = 60 * 60 * 24 * 8; // 8 days
+unsigned int nStakeMinAge = 60 * 60 * 1; // 2 hours
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 10; // 8 days
 unsigned int nModifierInterval = 10 * 60; // 10 minutes (time to elapse before new modifier is computed)
 
-int nCoinbaseMaturity = 30; // 30 blocks for coins to mature
+int nCoinbaseMaturity = 15; // 30 blocks for coins to mature
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 
@@ -66,7 +66,7 @@ map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "babesandnerd Signed Message:\n";
+const string strMessageMagic = "funcoin Signed Message:\n";
 
 // Settings
 int64_t nTransactionFee = MIN_TX_FEE;
@@ -961,13 +961,9 @@ int64_t GetProofOfWorkReward(int64_t nFees)
 {
     int64_t nSubsidy = 0 * COIN;
 
-    if(pindexBest->nHeight < 10) // To be minted for ico
+    if(pindexBest->nHeight < 11) 
     {
-        nSubsidy = 15000000 * COIN;
-    }
-    else if(pindexBest->nHeight < 60000)
-    {
-        nSubsidy = 0 * COIN;
+        nSubsidy = 250000000  * COIN;
     }
 
     if (fDebug && GetBoolArg("-printcreation"))
@@ -2294,7 +2290,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
     return true;
 }
 
-// babesandnerd: attempt to generate suitable proof-of-stake
+// funcoin: attempt to generate suitable proof-of-stake
 bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
 {
     // if we are trying to sign
@@ -2382,7 +2378,7 @@ bool CheckDiskSpace(uint64_t nAdditionalBytes)
         string strMessage = _("Warning: Disk space is low!");
         strMiscWarning = strMessage;
         printf("*** %s\n", strMessage.c_str());
-        uiInterface.ThreadSafeMessageBox(strMessage, "babesandnerd", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+        uiInterface.ThreadSafeMessageBox(strMessage, "funcoin", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
         StartShutdown();
         return false;
     }
@@ -2462,9 +2458,9 @@ bool LoadBlockIndex(bool fAllowNew)
         if (!fAllowNew)
             return false;
 
-        const char* pszTimestamp = "BabesAndNerd";
+        const char* pszTimestamp = "July 27th 2015 - SatoshiFUN is about to release crypto fun!!";
         CTransaction txNew;
-        txNew.nTime = 1442933188;
+        txNew.nTime = 1437924139;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 49731 << CBigNum(9999) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -2474,9 +2470,9 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1442933188;
+        block.nTime    = 1437924139 + 10;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 87;
+        block.nNonce   = 887385;
 		if(fTestNet)
         {
             block.nNonce   = 0;
@@ -2503,7 +2499,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("block.nNonce = %u \n", block.nNonce);
 
         //// debug print
-        assert(block.hashMerkleRoot == uint256("0x820eb3e00cd666b429160eaff93955d61a7507771308ef8fd62a66f57cb6f96e"));
+        assert(block.hashMerkleRoot == uint256("0x21b60e7eeba374b4329ecc41890e66e9d9d917be595edb89f24c752b7e065828"));
         block.print();
         assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
 
