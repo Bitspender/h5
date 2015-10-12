@@ -43,6 +43,9 @@ unsigned int nStakeMinAge = 60 * 60 * 1; // 2 hours
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 10; // 8 days
 unsigned int nModifierInterval = 10 * 60; // 10 minutes (time to elapse before new modifier is computed)
 
+
+int64 nChainStartTime = 1437924139;
+
 int nCoinbaseMaturity = 15; // 30 blocks for coins to mature
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2458,50 +2461,49 @@ bool LoadBlockIndex(bool fAllowNew)
         if (!fAllowNew)
             return false;
 
-        const char* pszTimestamp = "July 27th 2015 - SatoshiFUN is about to release crypto fun!!";
+        // Genesis block
+        const char* pszTimesHIFUNp = "July 27th 2015 - SatoshiFUN is about to release crypto fun!!";
         CTransaction txNew;
-        txNew.nTime = 1437924139;
+        txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
-        txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(9999) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(9999) << vector<unsigned char>((const unsigned char*)pszTimesHIFUNp, (const unsigned char*)pszTimesHIFUNp + strlen(pszTimesHIFUNp));
         txNew.vout[0].SetEmpty();
+
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1437924139 + 10;
+        block.nTime    = nChainStartTime + 10;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 887385;
-		if(fTestNet)
-        {
-            block.nNonce   = 0;
-        }
-        if (false  && (block.GetHash() != hashGenesisBlock)) {
+		
+		/* here comes */
+if (true && (block.GetHash() != hashGenesisBlock)) {
 
-        // This will figure out a valid hash and Nonce if you're
-        // creating a different genesis block:
-            uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+       // This will figure out a valid hash and Nonce if you're        // creating a different genesis block:
+           uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
             while (block.GetHash() > hashTarget)
                {
-                   ++block.nNonce;
-                   if (block.nNonce == 0)
-                   {
-                       printf("NONCE WRAPPED, incrementing time");
-                       ++block.nTime;
+                  ++block.nNonce;
+                  if (block.nNonce == 0)                   {
+                      printf("NONCE WRAPPED, incrementing time");                       ++block.nTime;
                    }
                }
         }
+
+/**/
+
+        //// debug print
         block.print();
         printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
         printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
         printf("block.nTime = %u \n", block.nTime);
         printf("block.nNonce = %u \n", block.nNonce);
 
-        //// debug print
-        assert(block.hashMerkleRoot == uint256("0x21b60e7eeba374b4329ecc41890e66e9d9d917be595edb89f24c752b7e065828"));   
-        assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
-
+        assert(block.hashMerkleRoot == uint256("0x21b60e7eeba374b4329ecc41890e66e9d9d917be595edb89f24c752b7e065828"));
+		assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
         // Start new block file
         unsigned int nFile;
         unsigned int nBlockPos;
